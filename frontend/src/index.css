@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  /* YouTube Style Dark Theme */
+  --bg-primary: #0F0F0F;
+  --bg-secondary: #212121;
+  --bg-hover: #ffffff1a;
+  /* 10% white */
+  --bg-active: #ffffff33;
+  /* 20% white */
+  --border-color: #3f3f3f;
+
+  /* Accent Colors */
+  --accent-primary: #f1f1f1;
+  --accent-secondary: #aaaaaa;
+
+  /* Text Colors */
+  --text-primary: #f1f1f1;
+  --text-secondary: #aaaaaa;
+  --text-tertiary: #717171;
+
+  /* Geometry & Layout */
+  --border-radius-sm: 8px;
+  --border-radius-md: 12px;
+  --border-radius-pill: 40px;
+
+  --nav-width: 240px;
+  --nav-width-closed: 72px;
+
+  /* Effects */
+  --transition-fast: 0.1s ease;
+  --transition-normal: 0.2s ease;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-family: 'Roboto', "YouTube Noto", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Base Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+p {
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  color: var(--text-primary);
+}
+
+/* Global scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #717171;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #aaaaaa;
+}
+
+/* App Wrapper Layout */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.main-body {
+  display: flex;
+  flex-grow: 1;
+  margin-top: 56px;
+  /* Topbar height */
+  position: relative;
+}
+
+.main-content {
+  flex-grow: 1;
+  min-height: calc(100vh - 56px);
+  padding: 24px;
+  transition: margin-left var(--transition-fast);
+}
+
+.main-content.sidebar-open {
+  margin-left: var(--nav-width);
+}
+
+.main-content.sidebar-closed {
+  margin-left: var(--nav-width-closed);
+}
+
+/* Category Chips */
+.category-chips-container {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 24px;
+}
+
+.category-chips-container::-webkit-scrollbar {
+  display: none;
+}
+
+.yt-chip {
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  transition: background var(--transition-normal);
+}
+
+.yt-chip:hover {
+  background-color: var(--bg-active);
+}
+
+.yt-chip.active {
+  background-color: var(--text-primary);
+  color: var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 16px;
+  }
+
+  .main-content.sidebar-open,
+  .main-content.sidebar-closed {
+    margin-left: 0;
+  }
+}

@@ -1,0 +1,29 @@
+.my-videos-container {
+    padding: 0;
+    color: var(--text-primary);
+}
+
+.my-videos-header {
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.my-videos-header h2 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+.my-videos-list {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius-md);
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-state {
+    color: var(--text-secondary);
+    font-size: 16px;
+}

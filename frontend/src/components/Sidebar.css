@@ -1,0 +1,122 @@
+.yt-sidebar {
+    position: fixed;
+    left: 0;
+    top: 56px;
+    /* Below topbar */
+    bottom: 0;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    transition: width var(--transition-fast);
+    z-index: 100;
+    padding-top: 12px;
+}
+
+.yt-sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.yt-sidebar:hover::-webkit-scrollbar-thumb {
+    background: var(--text-tertiary);
+}
+
+.yt-sidebar.open {
+    width: var(--nav-width);
+}
+
+.yt-sidebar.closed {
+    width: var(--nav-width-closed);
+}
+
+.sidebar-section {
+    padding: 0 12px;
+    margin-bottom: 8px;
+}
+
+.sidebar-heading {
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.yt-nav-item {
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    height: 40px;
+    border-radius: var(--border-radius-md);
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.yt-sidebar.closed .yt-nav-item {
+    flex-direction: column;
+    height: auto;
+    padding: 16px 0 14px 0;
+    border-radius: var(--border-radius-md);
+    margin-bottom: 4px;
+}
+
+.yt-nav-item:hover {
+    background-color: var(--bg-hover);
+}
+
+.yt-nav-item.active {
+    background-color: var(--bg-active);
+    font-weight: 500;
+}
+
+.yt-nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 24px;
+}
+
+.yt-sidebar.closed .yt-nav-icon {
+    margin-right: 0;
+    margin-bottom: 6px;
+}
+
+.yt-nav-label {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.yt-sidebar.closed .yt-nav-label {
+    font-size: 10px;
+}
+
+.sidebar-divider {
+    border-bottom: 1px solid var(--border-color);
+    margin: 8px 0;
+}
+
+.yt-sidebar.closed .sidebar-divider,
+.yt-sidebar.closed .sidebar-heading {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .yt-sidebar.closed {
+        transform: translateX(-100%);
+        width: var(--nav-width);
+    }
+
+    .yt-sidebar.open {
+        transform: translateX(0);
+        width: var(--nav-width);
+        position: fixed;
+        left: 0;
+        top: 56px;
+        bottom: 0;
+        z-index: 2000;
+        background-color: var(--bg-primary);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.8);
+    }
+}
