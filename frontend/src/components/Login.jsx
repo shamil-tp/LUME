@@ -9,9 +9,10 @@ const Login = ({ onLogin }) => {
         // console.log("Success! Google JWT Token:", credentialResponse.credential);
         try{
             const result = await api.post('/login',{
-            credentials:credentialResponse.credential
+            token:credentialResponse.credential
             })
             console.log(result.data)
+            localStorage.setItem('lume_token',result.data.token)
             
             if (onLogin) onLogin();
         }catch(e){
