@@ -8,19 +8,20 @@
 }
 
 .add-video-header h2 {
-    font-size: 24px;
-    font-weight: 500;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -1px;
     margin-bottom: 8px;
 }
 
 .add-video-header p {
     color: var(--text-secondary);
-    font-size: 14px;
+    font-size: 15px;
 }
 
 .add-video-box {
-    background-color: var(--bg-secondary);
-    border: 1px dashed var(--border-color);
+    background-color: var(--bg-hover);
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius-md);
     padding: 64px 24px;
     display: flex;
@@ -47,17 +48,18 @@
 }
 
 .yt-btn-primary {
-    background-color: #3ea6ff;
-    color: #000;
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
     border: none;
-    padding: 10px 24px;
-    border-radius: 20px;
-    font-size: 14px;
-    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 24px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color var(--transition-fast);
+    transition: all var(--transition-fast);
 }
 
 .yt-btn-primary:hover {
-    background-color: #65b8ff;
+    background-color: var(--text-secondary);
+    transform: translateY(-2px);
 }

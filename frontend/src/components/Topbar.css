@@ -3,20 +3,20 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-    height: 56px;
+    height: 64px;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
+    width: 100vw;
     background: var(--bg-primary);
     z-index: 1000;
+    box-sizing: border-box;
 }
 
 .topbar-left {
     display: flex;
     align-items: center;
-    width: 20%;
-    min-width: 160px;
+    width: auto;
 }
 
 .menu-btn {
@@ -30,10 +30,10 @@
 }
 
 .logo-text {
-    font-family: inherit;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: -1px;
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
     margin-left: 6px;
     color: white;
 }
@@ -43,25 +43,25 @@
     display: flex;
     align-items: center;
     flex: 1;
-    max-width: 720px;
-    margin: 0 40px;
+    max-width: 600px;
+    margin: 0 24px;
 }
 
 .search-wrapper {
     display: flex;
     flex: 1;
     align-items: center;
-    height: 40px;
+    height: 44px;
+    background: var(--bg-hover);
+    border-radius: 40px;
+    overflow: hidden;
 }
 
 .search-box {
     flex: 1;
     height: 100%;
-    background: hsl(0, 0%, 7%);
-    border: 1px solid var(--border-color);
-    border-right: none;
-    border-radius: 40px 0 0 40px;
-    padding: 0 4px 0 16px;
+    background: transparent;
+    padding: 0 4px 0 20px;
     display: flex;
     align-items: center;
 }
@@ -79,29 +79,28 @@
 .search-btn {
     width: 64px;
     height: 100%;
-    background: var(--bg-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 0 40px 40px 0;
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: background var(--transition-fast);
 }
 
 .search-btn:hover {
-    background: var(--border-color);
+    background: var(--bg-active);
 }
 
 .mic-btn {
-    margin-left: 16px;
-    background: var(--bg-secondary);
+    margin-left: 12px;
+    background: var(--bg-hover);
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
 }
 
 .mic-btn:hover {
-    background: var(--border-color);
+    background: var(--bg-active);
 }
 
 /* Right Actions */
@@ -109,14 +108,12 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    width: 20%;
-    min-width: 160px;
-    gap: 8px;
+    gap: 12px;
 }
 
 .icon-btn {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -129,17 +126,17 @@
 }
 
 .yt-profile {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    background-color: #A32890;
-    /* Random profile color */
+    background-color: #5865F2;
+    /* Modern purple/blue color */
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    margin-left: 10px;
     cursor: pointer;
+    font-weight: 600;
 }
 
 /* Responsive */

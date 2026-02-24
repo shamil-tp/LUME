@@ -1,13 +1,23 @@
 import React from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import './Login.css';
+import api from '../services/api'
 
 const Login = ({ onLogin }) => {
     // This handles the Google OAuth response
-    const handleGoogleSuccess = (credentialResponse) => {
-        console.log("Success! Google JWT Token:", credentialResponse.credential);
-        // We will send this token to your Express backend!
-        if (onLogin) onLogin();
+    const handleGoogleSuccess = async (credentialResponse) => {
+        // console.log("Success! Google JWT Token:", credentialResponse.credential);
+        try{
+            const result = await api.post('/login',{
+            credentials:credentialResponse.credential
+            })
+            console.log(result.data)
+            
+            if (onLogin) onLogin();
+        }catch(e){
+            console.log("Backend Login Failed:", e.response?.data || e.message)
+        }
+        
     };
 
     return (

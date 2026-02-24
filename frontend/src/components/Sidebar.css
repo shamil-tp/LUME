@@ -1,7 +1,7 @@
 .yt-sidebar {
     position: fixed;
     left: 0;
-    top: 56px;
+    top: 64px;
     /* Below topbar */
     bottom: 0;
     background-color: var(--bg-primary);
@@ -15,7 +15,7 @@
 }
 
 .yt-sidebar::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
 }
 
 .yt-sidebar:hover::-webkit-scrollbar-thumb {
@@ -38,18 +38,20 @@
 .sidebar-heading {
     padding: 8px 12px;
     font-size: 16px;
-    font-weight: 500;
+    font-weight: 600;
     margin-bottom: 4px;
+    color: var(--text-primary);
 }
 
 .yt-nav-item {
     display: flex;
     align-items: center;
-    padding: 0 12px;
-    height: 40px;
+    padding: 0 16px;
+    height: 48px;
     border-radius: var(--border-radius-md);
     color: var(--text-primary);
     cursor: pointer;
+    transition: background-color var(--transition-fast);
 }
 
 .yt-sidebar.closed .yt-nav-item {
@@ -66,14 +68,14 @@
 
 .yt-nav-item.active {
     background-color: var(--bg-active);
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .yt-nav-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 24px;
+    margin-right: 20px;
 }
 
 .yt-sidebar.closed .yt-nav-icon {
@@ -82,19 +84,19 @@
 }
 
 .yt-nav-label {
-    font-size: 14px;
+    font-size: 15px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
 .yt-sidebar.closed .yt-nav-label {
-    font-size: 10px;
+    font-size: 11px;
 }
 
 .sidebar-divider {
     border-bottom: 1px solid var(--border-color);
-    margin: 8px 0;
+    margin: 12px 0;
 }
 
 .yt-sidebar.closed .sidebar-divider,
@@ -113,10 +115,10 @@
         width: var(--nav-width);
         position: fixed;
         left: 0;
-        top: 56px;
+        top: 64px;
         bottom: 0;
         z-index: 2000;
         background-color: var(--bg-primary);
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.8);
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.5);
     }
 }
