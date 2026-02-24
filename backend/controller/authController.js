@@ -1,3 +1,3 @@
 const User = require('../model/User')
 
-exports
+exports.Login = ()
