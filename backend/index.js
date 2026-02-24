@@ -6,14 +6,13 @@ const connectDB = require('./config/db')
 const app = express()
 
 app.use(cors({
-    origin:process.env.FRONTEND_URL
+    origin:[process.env.FRONTEND_URL,'http://localhost:5173','http://localhost:5174']
 }))
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
 const auth = require('./routes/authRoutes')
 app.use('/api',auth)
-
 
 
 const port = process.env.PORT || 3001
