@@ -4,7 +4,7 @@ import { MoreVertical } from 'lucide-react';
 import './DiscoverSection.css';
 
 // Standardized Mock Data for YouTube Style
-const MOCK_DATA = [
+let MOCK_DATA = [
     { id: 1, title: 'Building a Cyberpunk City in Unreal Engine 5', channel: 'Level Design Pro', views: '1.2M views', time: '2 days ago', avatar: 'https://i.pravatar.cc/150?img=11', image: 'https://images.unsplash.com/photo-1518773553398-650c184e0bb3?q=80&w=640&auto=format&fit=crop', duration: '14:20' },
     { id: 2, title: 'Neon Nights Official Mix 2026', channel: 'Synthwave Central', views: '840K views', time: '1 week ago', avatar: 'https://i.pravatar.cc/150?img=12', image: 'https://images.unsplash.com/photo-1555448248-2571daf6344b?q=80&w=640&auto=format&fit=crop', duration: '1:02:45' },
     { id: 3, title: 'The Void - Deep Space Exploration Documentary', channel: 'Cosmic Docs', views: '3.4M views', time: '1 month ago', avatar: 'https://i.pravatar.cc/150?img=13', image: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=640&auto=format&fit=crop', duration: '45:12' },
@@ -41,6 +41,10 @@ const DiscoverSection = ({ onMovieClick }) => {
                     'Content-Type': 'multipart/form-data'
                 }
             })
+            if((response.data && response.data.media)){
+                console.log("no media found")
+            }
+            MOCK_DATA = response.data.media
         }catch(e){
             console.log(e.response)
             console.log("error fetching video")
