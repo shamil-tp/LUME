@@ -35,7 +35,7 @@ const DiscoverSection = ({ onMovieClick }) => {
         const fetchMedia = async()=>{
         try{
             let token = localStorage.getItem("token")
-            let response = await api.get('/media/fetchAll',{
+            let response = await api.get('/media/fetchAllMedia',{
                 headers:{
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'multipart/form-data'

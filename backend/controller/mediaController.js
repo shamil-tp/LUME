@@ -42,3 +42,17 @@ exports.uploadMedia = async (req, res) => {
         res.status(500).json({ error: "Failed to upload media to the database." });
     }
 };
+
+exports.getAllMedia = async(req,res)=>{
+    try{
+        const allMedia = await Media.find()
+        if(!allMedia){
+            console.log('fetching media error')
+            return res.status(401).json({message:"media fetch not fullfiled"})
+        }
+        return res.status(201).json({media:allMedia})
+    }catch(e){
+        console.log(e)
+        return res.status(401).json({message:"check controller for all media"})
+    }
+}
