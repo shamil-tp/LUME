@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { uploadMedia } = require('../controller/mediaController');
-const { protect } = require('../middleware/authMiddleware');
+// const { protect } = require('../middleware/authMiddleware');
+const { protect } = require('../middleware/protect');
 const upload = require('../middleware/upload');
 
 const multiUpload = upload.fields([

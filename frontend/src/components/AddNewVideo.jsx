@@ -41,7 +41,6 @@ const AddNewVideo = () => {
             formData.append('title', title);
             formData.append('description', description);
             formData.append('mediaFile', mediaFile);
-            formData.append('')
             if (thumbnail) formData.append('thumbnail', thumbnail);
 
             const token = localStorage.getItem('lume_token');

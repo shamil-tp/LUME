@@ -3,12 +3,12 @@ const User = require('../model/User')
 
 exports.protect = async(req,res,next)=>{
     let token;
-        if(res.headers.authorization && res.headers.authorization.startsWith('Bearer')){
+        if(req.headers.authorization && req.headers.authorization.startsWith('Bearer')){
         try{
-            token = res.headers.authorization.split(' ')[1]
+            token = req.headers.authorization.split(' ')[1]
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
-            req.user = await User.findById(decoded.user._id)
+            req.user = await User.findById(decoded.user)
             if(!req.user){
                 console.log("user not found")
                 return res.status(400).json({message:"user not found"})
