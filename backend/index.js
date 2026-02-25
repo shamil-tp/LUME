@@ -3,7 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const connectDB = require('./config/db')
-const { Login } = require('./controller/authController')
+// const { Login } = require('./controller/authController')
 const app = express()
 
 app.use(cors({
@@ -16,10 +16,10 @@ const auth = require('./routes/authRoutes')
 app.use('/api',auth)
 
 const media = require('./routes/mediaRoutes')
-app.use('/api',media)
+app.use('/api/media',media)
 
 // Ensure /api/login is always handled
-app.post('/api/login', Login)
+// app.post('/api/login', Login)
 
 
 const port = process.env.PORT || 3001

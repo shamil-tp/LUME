@@ -1,37 +1,30 @@
 import React, { useState, useRef } from 'react';
-import api from '../services/api'; // Make sure this path is correct!
+import api from '../services/api';
 import './AddNewVideo.css';
 
 const AddNewVideo = () => {
-    // 1. State for the files and text
     const [mediaFile, setMediaFile] = useState(null);
     const [thumbnail, setThumbnail] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     
-    // 2. State for the UI loading/messages
     const [isUploading, setIsUploading] = useState(false);
     const [message, setMessage] = useState('');
 
-    // 3. A reference to hide the ugly default file input
     const fileInputRef = useRef(null);
 
-    // Trigger the hidden file input when your custom button is clicked
     const handleFileSelectClick = () => {
         fileInputRef.current.click();
     };
 
-    // When the user actually picks a file from their computer
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
             setMediaFile(file);
-            // Auto-fill the title with the file name (without the .mp4 extension)
             setTitle(file.name.split('.').slice(0, -1).join('.')); 
         }
     };
 
-    // The function that sends the data to your Express backend
     const handleSubmit = async (e) => {
         e.preventDefault();
         
@@ -48,6 +41,7 @@ const AddNewVideo = () => {
             formData.append('title', title);
             formData.append('description', description);
             formData.append('mediaFile', mediaFile);
+            formData.append('')
             if (thumbnail) formData.append('thumbnail', thumbnail);
 
             const token = localStorage.getItem('lume_token');
@@ -82,11 +76,9 @@ const AddNewVideo = () => {
                 <p>Upload a new video or audio track to LUME.</p>
             </div>
 
-            {/* Show messages (success or error) */}
             {message && <div className={`upload-message ${isUploading ? 'loading' : ''}`}>{message}</div>}
 
             <div className="add-video-box">
-                {/* STEP 1: IF NO FILE IS SELECTED, SHOW YOUR ORIGINAL UI */}
                 {!mediaFile ? (
                     <div className="upload-placeholder">
                         <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="upload-icon">
@@ -96,7 +88,6 @@ const AddNewVideo = () => {
                         </svg>
                         <p>Select video or audio files to upload</p>
                         
-                        {/* Hidden file input */}
                         <input 
                             type="file" 
                             accept="video/*,audio/*" 
@@ -105,13 +96,11 @@ const AddNewVideo = () => {
                             onChange={handleFileChange}
                         />
                         
-                        {/* Your custom button triggers the hidden input */}
                         <button className="yt-btn-primary" onClick={handleFileSelectClick}>
                             Select Files
                         </button>
                     </div>
                 ) : (
-                    /* STEP 2: ONCE A FILE IS SELECTED, SHOW THE DETAILS FORM */
                     <form className="details-form" onSubmit={handleSubmit}>
                         <div className="selected-file-banner">
                             <span className="file-name">Selected: {mediaFile.name}</span>
