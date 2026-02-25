@@ -138,6 +138,10 @@
     cursor: pointer;
     font-weight: 600;
 }
+.yt-profile img{
+    border-radius: 50%;
+    width: 100%;
+}
 
 /* Responsive */
 @media (max-width: 650px) {
@@ -150,5 +154,8 @@
     .topbar-center {
         justify-content: flex-end;
         margin: 0;
+    }
+    .yt-name{
+        display: none;
     }
 }

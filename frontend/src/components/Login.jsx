@@ -11,8 +11,10 @@ const Login = ({ onLogin }) => {
             const result = await api.post('/login',{
             token:credentialResponse.credential
             })
-            console.log(result.data)
+            // console.log(result.data)
             localStorage.setItem('lume_token',result.data.token)
+            localStorage.setItem('lume_user',JSON.stringify(result.data.user))
+            // window.location.href = '/'
             
             if (onLogin) onLogin();
         }catch(e){

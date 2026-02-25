@@ -8,6 +8,8 @@ const Topbar = ({ onToggleSidebar }) => {
         window.location.reload();
     };
 
+    const user = JSON.parse(localStorage.getItem('lume_user'))
+
     return (
         <header className="yt-topbar">
             <div className="topbar-left">
@@ -48,7 +50,14 @@ const Topbar = ({ onToggleSidebar }) => {
                     <Bell size={24} />
                 </button>
                 <div className="yt-profile" onClick={handleLogout} title="Sign Out">
-                    <User size={20} />
+                    {/* <User size={20} /> */}
+                    <img src={user.picture} alt="" />
+                    {/* <span>{user.name}</span> */}
+                </div>
+                <div className="yt-name" title="Name">
+                    {/* <User size={20} /> */}
+                    {/* <img src={user.picture} alt="" /> */}
+                    <span>{user.name}</span>
                 </div>
             </div>
         </header>
