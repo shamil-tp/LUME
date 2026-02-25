@@ -3,6 +3,7 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const connectDB = require('./config/db')
+const { Login } = require('./controller/authController')
 const app = express()
 
 app.use(cors({
@@ -14,10 +15,17 @@ app.use(express.json())
 const auth = require('./routes/authRoutes')
 app.use('/api',auth)
 
+// Ensure /api/login is always handled
+app.post('/api/login', Login)
+
 
 const port = process.env.PORT || 3001
 
-(async()=>{
-    await connectDB()
-    app.listen(port)
-})()
+// (async()=>{
+//     await connectDB()
+//     app.listen(port)
+// })()
+app.listen(port,()=>{
+    console.log("server running")
+    connectDB()
+})

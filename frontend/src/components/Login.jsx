@@ -45,7 +45,7 @@ const Login = ({ onLogin }) => {
                             size="large"
                             shape="rectangular"
                             text="continue_with"
-                            width="100%"
+                            width={300}
                         />
                     </div>
                 </div>

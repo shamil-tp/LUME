@@ -24,9 +24,9 @@ exports.Login = async(req,res)=>{
 
         const {sub:googleId,email,name,picture} = payload
 
-        const user = await User.findOne({googleId})
+        let user = await User.findOne({googleId})
         if(!user){
-            await User.create({
+           user = await User.create({
                 googleId,
                 email,
                 name,

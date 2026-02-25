@@ -5,7 +5,7 @@ import './Sidebar.css';
 const Sidebar = ({ isOpen, currentView, onNavigate }) => {
     const navItems = [
         { id: 'discover', icon: <Compass size={24} />, label: 'Discover' },
-        { id: 'add', icon: <PlusSquare size={24} />, label: 'Add new video' },
+        { id: 'add', icon: <PlusSquare size={24} />, label: 'Add' },
         { id: 'myVideos', icon: <PlaySquare size={24} />, label: 'My videos' },
     ];
 
