@@ -1,4 +1,5 @@
-import React from 'react';
+import { useEffect } from 'react';
+import api from '../services/api'
 import { MoreVertical } from 'lucide-react';
 import './DiscoverSection.css';
 
@@ -15,6 +16,42 @@ const MOCK_DATA = [
 ];
 
 const DiscoverSection = ({ onMovieClick }) => {
+    
+    // const fetchMedia = async()=>{
+    //     try{
+    //         let token = localStorage.getItem("token")
+    //         let response = await api.get('/media/fetchAll',{
+    //             headers:{
+    //                 'Authorization': `Bearer ${token}`,
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         })
+    //     }catch(e){
+    //         console.log(e.response)
+    //         console.log("error fetching video")
+    //     }
+    // }
+    useEffect(() => {
+        const fetchMedia = async()=>{
+        try{
+            let token = localStorage.getItem("token")
+            let response = await api.get('/media/fetchAll',{
+                headers:{
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+        }catch(e){
+            console.log(e.response)
+            console.log("error fetching video")
+        }
+    }
+        fetchMedia()
+        // return () => {
+            
+        // };
+    }, []);
+
     return (
         <section className="yt-video-grid">
             {MOCK_DATA.map((video) => (
