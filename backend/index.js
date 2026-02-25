@@ -15,6 +15,9 @@ app.use(express.json())
 const auth = require('./routes/authRoutes')
 app.use('/api',auth)
 
+const media = require('./routes/mediaRoutes')
+app.use('/api',media)
+
 // Ensure /api/login is always handled
 app.post('/api/login', Login)
 
