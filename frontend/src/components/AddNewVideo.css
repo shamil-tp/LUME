@@ -63,3 +63,105 @@
     background-color: var(--text-secondary);
     transform: translateY(-2px);
 }
+/* --- Add this below your existing CSS --- */
+
+.upload-message {
+    padding: 12px 16px;
+    background-color: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.upload-message.loading {
+    color: #e50914; /* Standard loading highlight, adjust to your theme */
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+/* Step 2 Form Styling */
+.details-form {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: left;
+}
+
+.selected-file-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+}
+
+.file-name {
+    font-size: 14px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
+}
+
+.clear-file-btn {
+    background: none;
+    border: none;
+    color: #e50914; /* Adjust to your app's primary action color */
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.yt-input {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 12px 16px;
+    border-radius: var(--border-radius-md);
+    font-size: 15px;
+    transition: border-color var(--transition-fast);
+}
+
+.yt-input:focus {
+    outline: none;
+    border-color: var(--text-secondary);
+}
+
+.yt-file-input {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.submit-btn {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
