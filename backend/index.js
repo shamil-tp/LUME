@@ -18,16 +18,11 @@ app.use('/api',auth)
 const media = require('./routes/mediaRoutes')
 app.use('/api/media',media)
 
-// Ensure /api/login is always handled
 // app.post('/api/login', Login)
 
 
 const port = process.env.PORT || 3001
 
-// (async()=>{
-//     await connectDB()
-//     app.listen(port)
-// })()
 app.listen(port,()=>{
     console.log("server running")
     connectDB()
