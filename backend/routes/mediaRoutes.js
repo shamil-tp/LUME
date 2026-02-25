@@ -9,9 +9,6 @@ const multiUpload = upload.fields([
     { name: 'thumbnail', maxCount: 1 }
 ]);
 
-// POST request to /api/media/upload
-// 1. Verify Token -> 2. Upload to Cloudinary -> 3. Save to MongoDB
 router.post('/upload', protect, multiUpload, uploadMedia);
-// router.post('/upload', multiUpload, uploadMedia);
 router.get('/fetchAllMedia',protect,getAllMedia)
 module.exports = router;
