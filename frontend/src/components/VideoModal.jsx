@@ -95,8 +95,9 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                             <span className="meta-value">Sci-Fi, Cyberpunk, Thriller, Action</span> */}
                         </div>
                         <div className="meta-item">
-                            <span className="meta-label">Director:</span>
-                            <span className="meta-value">Denis Villeneuve</span>
+                            <span className="meta-label">Profile:</span>
+                            {/* <span className="meta-value">Denis Villeneuve</span> */}
+                            <img src={media.uploader.profilePicture} alt={media.uploader.name} className='meta-label' style={{borderRadius:'1 0%',width:"46px"}}/>
                         </div>
                     </div>
                 </div>
