@@ -14,6 +14,8 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentView, setCurrentView] = useState('discover');
 
+  const [currentVideoId, setCurrentVideoId] = useState(null);
+
   // If not logged in, render the login page exclusively
   if (!isLoggedIn) {
     return <Login onLogin={() => setIsLoggedIn(true)} />;
@@ -27,7 +29,7 @@ function App() {
         return <MyVideos />;
       case 'discover':
       default:
-        return <DiscoverSection onMovieClick={(videoId) => setIsVideoModalOpen(true)} />;
+        return <DiscoverSection onMovieClick={(videoId) => {setCurrentVideoId(videoId);setIsVideoModalOpen(true)}} />;
     }
   };
 
@@ -49,7 +51,8 @@ function App() {
 
       <VideoModal
         isOpen={isVideoModalOpen}
-        onClose={() => setIsVideoModalOpen(false)}
+        videoId={currentVideoId}
+        onClose={() => {setCurrentVideoId(null);setIsVideoModalOpen(false)}}
       />
     </div>
   );

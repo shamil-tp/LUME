@@ -62,7 +62,7 @@ const DiscoverSection = ({ onMovieClick }) => {
     return (
         <section className="yt-video-grid">
             {media.map((video) => (
-                <div key={video._id} className="yt-video-card" onClick={onMovieClick(video._id)}>
+                <div key={video._id} className="yt-video-card" onClick={()=>onMovieClick(video._id)}>
                     <div className="yt-thumbnail-container">
                         <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
                         <span className="yt-duration">{video.duration}</span>

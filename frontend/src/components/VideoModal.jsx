@@ -1,8 +1,29 @@
-import React from 'react';
 import { X, Play, Plus, Share2, ThumbsUp } from 'lucide-react';
+import api from '../services/api'
+import { useState, useEffect } from 'react';
 import './VideoModal.css';
 
-const VideoModal = ({ isOpen, onClose }) => {
+const VideoModal = ({ videoId,isOpen, onClose }) => {
+    let [media,setMedia] = useState({})
+
+    useEffect(()=>{
+        const fetchMediaInfo = async()=>{
+            try{
+            let token = localStorage.getItem('lume_token')
+            let response = await api.get(`/media/fetchMediaInfo/${videoId}`,{
+                headers:{
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+            setMedia(response.data.info)
+        }catch(e){
+            console.log(e.message)
+            console.log('error fetching video data')
+        }
+        }
+        fetchMediaInfo()
+    })
+
     if (!isOpen) return null;
 
     return (
