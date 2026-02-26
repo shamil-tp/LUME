@@ -45,7 +45,7 @@ exports.uploadMedia = async (req, res) => {
 
 exports.getAllMedia = async(req,res)=>{
     try{
-        const allMedia = await Media.find()
+        const allMedia = await Media.find().populate('uploader',"email name profilePicture")
         if(!allMedia){
             console.log('fetching media error')
             return res.status(401).json({message:"media fetch not fullfiled"})
@@ -54,5 +54,18 @@ exports.getAllMedia = async(req,res)=>{
     }catch(e){
         console.log(e)
         return res.status(401).json({message:"check controller for all media"})
+    }
+}
+
+exports.getMyMedia = async(req,res)=>{
+    try{
+        const myMedia = await Media.find({uploader:req.user}).select("-mediaPublicId -thumbnailPublicId -updatedAt -__v -uploader")
+        if(!myMedia){
+            return res.status(201).json({message:'you have no media',status:false})
+        }
+        return res.status(201).json({status:true,media:myMedia})
+    }catch(e){
+        console.log(e)
+        return res.status(401).json({message:"check controller for my media"})
     }
 }
