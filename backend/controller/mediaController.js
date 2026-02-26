@@ -87,3 +87,18 @@ exports.getMediaInfo = async(req,res)=>{
         return res.status(401).json({message:"check media controller/ getMediaInfo"})
     }
 }
+exports.getMedia = async(req,res)=>{
+    try{
+        if(!req.params.mediaId){
+            return null
+        }
+        const media = await Media.findById(req.params.mediaId).populate('uploader','name email profilePicture')
+        if(!media){
+            return res.status(401).json({message:"no media found with given id"})
+        }
+        return res.status(201).json({media,message:true})
+    }catch(e){
+        console.log(e.message)
+        return res.status(401).json({message:"check media controller/ getMedia"})
+    }
+}

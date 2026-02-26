@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { uploadMedia, getAllMedia, getMyMedia, getMediaInfo } = require('../controller/mediaController');
+const { uploadMedia, getAllMedia, getMyMedia, getMediaInfo, getMedia } = require('../controller/mediaController');
 // const { protect } = require('../middleware/authMiddleware');
 const { protect } = require('../middleware/protect');
 const upload = require('../middleware/upload');
@@ -13,4 +13,5 @@ router.post('/upload', protect, multiUpload, uploadMedia);
 router.get('/fetchAllMedia',protect,getAllMedia)
 router.get('/fetchMyMedia',protect,getMyMedia)
 router.get('/fetchMediaInfo/:mediaId',protect,getMediaInfo)
+router.get('/fetchMedia/:mediaId',protect,getMedia)
 module.exports = router;
