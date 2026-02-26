@@ -12,8 +12,13 @@ const WatchVideo = ({videoId}) => {
     useEffect(() => {
         const fetchSingleVideo = async () => {
             try {
+                const token = localStorage.getItem('lume_token')
                 // Fetch the specific video data from your Express backend
-                const response = await api.get(`/media/${id}`);
+                const response = await api.get(`/media/fetchMedia/${id}`,{
+                    headers:{
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 setVideo(response.data.media);
             } catch (error) {
                 console.error("Failed to load video", error);
