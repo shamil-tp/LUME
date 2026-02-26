@@ -49,11 +49,21 @@ function App() {
         </main>
       </div>
 
-      <VideoModal
+      {/* <VideoModal
         isOpen={isVideoModalOpen}
         videoId={currentVideoId}
         onClose={() => {setCurrentVideoId(null);setIsVideoModalOpen(false)}}
-      />
+      /> */}
+      {isVideoModalOpen && currentVideoId && (
+        <VideoModal
+          isOpen={isVideoModalOpen}
+          videoId={currentVideoId}
+          onClose={() => {
+              setIsVideoModalOpen(false);
+              setCurrentVideoId(null);
+          }}
+        />
+      )}
     </div>
   );
 }

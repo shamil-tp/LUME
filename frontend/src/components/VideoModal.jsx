@@ -7,6 +7,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
     let [media,setMedia] = useState({})
 
     useEffect(()=>{
+        if (!isOpen || !videoId) return;
         const fetchMediaInfo = async()=>{
             try{
             let token = localStorage.getItem('lume_token')
@@ -22,7 +23,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
         }
         }
         fetchMediaInfo()
-    })
+    },[videoId,isOpen])
 
     if (!isOpen) return null;
 
@@ -34,7 +35,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                 </button>
 
                 <div className="modal-hero">
-                    <div className="modal-video-placeholder" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1600&auto=format&fit=crop")' }}>
+                    <div className="modal-video-placeholder" style={{ backgroundImage: `url(${media.thumbnailUrl})` }}>
                         <button className="main-play-btn">
                             <Play size={32} fill="currentColor" />
                         </button>
@@ -48,11 +49,13 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                             <span className="match-score">98% Match</span>
                             <span className="year">2026</span>
                             <span className="age-rating glass-panel">18+</span>
-                            <span className="duration">2h 14m</span>
+                            <span className="duration">{media.duration}</span>
+                            {/* <span className="duration">2h 14m</span> */}
                             <span className="quality glass-panel">4K HDR</span>
                         </div>
 
-                        <h2 className="modal-title">NEON DRIFTER</h2>
+                        {/* <h2 className="modal-title">NEON DRIFTER</h2> */}
+                        <h2 className="modal-title">{media.title.toUpperCase()}</h2>
 
                         <div className="modal-actions">
                             <button className="btn-primary">
@@ -64,14 +67,19 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                         </div>
 
                         <p className="modal-description">
-                            In a world where memories can be extracted and sold, a rogue archivist uncovers a conspiracy that threatens the very fabric of human consciousness. The ultimate cyberpunk thriller featuring groundbreaking visual effects.
+                            {media.description}
                         </p>
+                        {/* <p className="modal-description">
+                            In a world where memories can be extracted and sold, a rogue archivist uncovers a conspiracy that threatens the very fabric of human consciousness. The ultimate cyberpunk thriller featuring groundbreaking visual effects.
+                        </p> */}
                     </div>
 
                     <div className="modal-meta">
                         <div className="meta-item">
-                            <span className="meta-label">Cast:</span>
-                            <span className="meta-value">Alina Starkov, Ben Barnes, Jessie Mei Li</span>
+                            <span className="meta-label">Uploader:</span>
+                            <span className="meta-value">{media.uploader}</span>
+                            {/* <span className="meta-label">Cast:</span>
+                            <span className="meta-value">Alina Starkov, Ben Barnes, Jessie Mei Li</span> */}
                         </div>
                         <div className="meta-item">
                             <span className="meta-label">Genres:</span>
