@@ -46,36 +46,53 @@ const MyVideos = () => {
         </div>
     );
     }
+    if(myMedia.length>0){
+        return (
+            <section className="yt-video-grid">
+                {myMedia.map((video) => (
+                    <div key={video._id} className="yt-video-card">
+                        <div className="yt-thumbnail-container">
+                            <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
+                            {/* <span className="yt-duration">{video.duration}</span> */}
+                        </div>
 
+                        <div className="yt-video-details">
+                            <img src={user.picture} alt={user.name} className="yt-channel-avatar" />
 
-    // return (
-    //     <section className="yt-video-grid">
-    //         {myMedia.map((video) => (
-    //             <div key={video._id} className="yt-video-card">
-    //                 <div className="yt-thumbnail-container">
-    //                     <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
-    //                     <span className="yt-duration">{video.duration}</span>
-    //                 </div>
+                            <div className="yt-video-info">
+                                <h3 className="yt-video-title" title={video.title}>{video.title}</h3>
+                                <div className="yt-channel-name">{user.name}</div>
+                                {/* <div className="yt-video-meta">
+                                    {video.views} • {video.time}
+                                </div> */}
+                            </div>
 
-    //                 <div className="yt-video-details">
-    //                     <img src={video.avatar} alt={video.channel} className="yt-channel-avatar" />
+                            {/* <button className="yt-more-btn" onClick={(e) => e.stopPropagation()}>
+                                <MoreVertical size={20} />
+                            </button> */}
+                        </div>
+                    </div>
+                ))}
+            </section>
+        );
+    }else{
+        return (
+                <div className="my-videos-container">
+                <div className="my-videos-header">
+                    <h2>Channel content</h2>
+                </div>
 
-    //                     <div className="yt-video-info">
-    //                         <h3 className="yt-video-title" title={video.title}>{video.title}</h3>
-    //                         <div className="yt-channel-name">{video.channel}</div>
-    //                         <div className="yt-video-meta">
-    //                             {video.views} • {video.time}
-    //                         </div>
-    //                     </div>
+                <div className="my-videos-list">
+                    <div className="empty-state">
+                        <p>No videos available yet.</p>
+                        {/* <p>Loading ...</p> */}
+                    </div>
+                </div>
+            </div>
+        )
+    }
 
-    //                     <button className="yt-more-btn" onClick={(e) => e.stopPropagation()}>
-    //                         <MoreVertical size={20} />
-    //                     </button>
-    //                 </div>
-    //             </div>
-    //         ))}
-    //     </section>
-    // );
+    
 };
 
 export default MyVideos;
