@@ -3,7 +3,7 @@ import api from '../services/api'
 import { useState, useEffect } from 'react';
 import './VideoModal.css';
 
-const VideoModal = ({ videoId,isOpen, onClose }) => {
+const VideoModal = ({ videoId,isOpen, onClose, onPlay }) => {
     let [media,setMedia] = useState({})
     let [isLoading,setLoading] = useState(true)
 
@@ -43,7 +43,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
 
                 <div className="modal-hero">
                     <div className="modal-video-placeholder" style={{ backgroundImage: `url(${media.thumbnailUrl})` }}>
-                        <button className="main-play-btn">
+                        <button className="main-play-btn" onClick={() => onPlay(videoId)}>
                             <Play size={32} fill="currentColor" />
                         </button>
                     </div>
@@ -65,7 +65,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                         <h2 className="modal-title">{media.title.toUpperCase()}</h2>
 
                         <div className="modal-actions">
-                            <button className="btn-primary">
+                            <button className="btn-primary" onClick={() => onPlay(videoId)}>
                                 <Play size={20} fill="currentColor" /> Play
                             </button>
                             <button className="btn-icon glass-panel"><Plus size={20} /></button>

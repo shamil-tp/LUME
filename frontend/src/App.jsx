@@ -6,6 +6,7 @@ import AddNewVideo from './components/AddNewVideo';
 import MyVideos from './components/MyVideos';
 import VideoModal from './components/VideoModal';
 import Login from './components/Login';
+import WatchVideo from './components/WatchVideo';
 
 function App() {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
@@ -27,6 +28,8 @@ function App() {
         return <AddNewVideo />;
       case 'myVideos':
         return <MyVideos />;
+      case 'watch':
+        return <WatchVideo videoId={currentVideoId} />;
       case 'discover':
       default:
         return <DiscoverSection onMovieClick={(videoId) => {setCurrentVideoId(videoId);setIsVideoModalOpen(true)}} />;
@@ -61,6 +64,12 @@ function App() {
           onClose={() => {
               setIsVideoModalOpen(false);
               setCurrentVideoId(null);
+          }}
+          onPlay={() => {
+              setIsVideoModalOpen(false); // Close the modal
+              setCurrentView('watch');    // Change the screen to WatchVideo
+              // Note: We deliberately DO NOT set currentVideoId to null here, 
+              // because WatchVideo needs that ID to fetch the video!
           }}
         />
       )}

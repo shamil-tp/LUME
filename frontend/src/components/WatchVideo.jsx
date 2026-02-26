@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom'; // Grabs the video ID from the URL
+// import { useParams } from 'react-router-dom'; // Grabs the video ID from the URL
 import api from '../services/api';
 import './WatchVideo.css';
 
-const WatchVideo = () => {
-    const { id } = useParams(); // Gets the ID from /watch/:id
+const WatchVideo = ({videoId}) => {
+    const id = videoId
+    // const { id } = useParams(); // Gets the ID from /watch/:id
     const [video, setVideo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
 
