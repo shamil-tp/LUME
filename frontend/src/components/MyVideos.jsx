@@ -53,7 +53,7 @@ const MyVideos = () => {
                     <div key={video._id} className="yt-video-card">
                         <div className="yt-thumbnail-container">
                             <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
-                            {/* <span className="yt-duration">{video.duration}</span> */}
+                            <span className="yt-duration">{video.duration}</span>
                         </div>
 
                         <div className="yt-video-details">
@@ -61,10 +61,13 @@ const MyVideos = () => {
 
                             <div className="yt-video-info">
                                 <h3 className="yt-video-title" title={video.title}>{video.title}</h3>
-                                <div className="yt-channel-name">{user.name}</div>
-                                {/* <div className="yt-video-meta">
-                                    {video.views} • {video.time}
-                                </div> */}
+                                <div className="yt-channel-name">{user.name} • <span className="yt-video-meta">
+    {video.views} views • {new Date(video.createdAt).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    })}
+</span></div>
                             </div>
 
                             {/* <button className="yt-more-btn" onClick={(e) => e.stopPropagation()}>

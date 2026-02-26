@@ -27,7 +27,7 @@ exports.uploadMedia = async (req, res) => {
             thumbnailUrl: thumbUrl,
             thumbnailPublicId: thumbId,
             mediaType: typeOfMedia,
-            uploader: req.user.id
+            uploader: req.user.id,
             duration: duration || "00:00"
         });
 
