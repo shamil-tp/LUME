@@ -77,7 +77,7 @@ exports.getMediaInfo = async(req,res)=>{
         if(!req.params.mediaId){
             return null
         }
-        const mediaInfo = await Media.findById(req.params.mediaId)
+        const mediaInfo = await Media.findById(req.params.mediaId).populate('uploader','name email profilePicture')
         if(!mediaInfo){
             return res.status(401).json({message:"no media found with given id"})
         }

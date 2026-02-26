@@ -5,6 +5,7 @@ import './VideoModal.css';
 
 const VideoModal = ({ videoId,isOpen, onClose }) => {
     let [media,setMedia] = useState({})
+    let [isLoading,setLoading] = useState(true)
 
     useEffect(()=>{
         if (!isOpen || !videoId) return;
@@ -17,6 +18,7 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                 }
             })
             setMedia(response.data.info)
+            setLoading(false)
         }catch(e){
             console.log(e.message)
             console.log('error fetching video data')
@@ -27,7 +29,12 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
 
     if (!isOpen) return null;
 
-    return (
+    if(isLoading){
+        return (
+            <p>Loading .....</p>
+        )
+    }else{
+        return (
         <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content glass-panel" onClick={e => e.stopPropagation()}>
                 <button className="modal-close glass-panel" onClick={onClose}>
@@ -77,13 +84,15 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
                     <div className="modal-meta">
                         <div className="meta-item">
                             <span className="meta-label">Uploader:</span>
-                            <span className="meta-value">{media.uploader}</span>
+                            <span className="meta-value">{media.uploader.name}</span>
                             {/* <span className="meta-label">Cast:</span>
                             <span className="meta-value">Alina Starkov, Ben Barnes, Jessie Mei Li</span> */}
                         </div>
                         <div className="meta-item">
-                            <span className="meta-label">Genres:</span>
-                            <span className="meta-value">Sci-Fi, Cyberpunk, Thriller, Action</span>
+                            <span className="meta-label">Email:</span>
+                            <span className="meta-value">{media.uploader.email}</span>
+                            {/* <span className="meta-label">Genres:</span>
+                            <span className="meta-value">Sci-Fi, Cyberpunk, Thriller, Action</span> */}
                         </div>
                         <div className="meta-item">
                             <span className="meta-label">Director:</span>
@@ -94,6 +103,12 @@ const VideoModal = ({ videoId,isOpen, onClose }) => {
             </div>
         </div>
     );
+    }
+
+    
 };
 
 export default VideoModal;
+
+
+// note: bring share ,like add to playlist
