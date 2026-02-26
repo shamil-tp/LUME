@@ -7,6 +7,7 @@ const AddNewVideo = () => {
     const [thumbnail, setThumbnail] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
+    const [duration, setDuration] = useState('00:00');
     
     const [isUploading, setIsUploading] = useState(false);
     const [message, setMessage] = useState('');
@@ -18,12 +19,37 @@ const AddNewVideo = () => {
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setMediaFile(file);
-            setTitle(file.name.split('.').slice(0, -1).join('.')); 
-        }
-    };
+    const file = e.target.files[0];
+    if (file) {
+        setMediaFile(file);
+        setTitle(file.name.split('.').slice(0, -1).join('.')); 
+
+        // --- THE DURATION EXTRACTION MAGIC ---
+        // 1. Create a temporary local URL for the file
+        const fileUrl = URL.createObjectURL(file);
+        
+        // 2. Create a hidden media element in memory
+        const mediaElement = document.createElement(file.type.startsWith('video/') ? 'video' : 'audio');
+        
+        // 3. When the browser finishes reading the file's basic info...
+        mediaElement.onloadedmetadata = () => {
+            const rawSeconds = mediaElement.duration;
+            
+            // Format the seconds into MM:SS (e.g., 03:45)
+            const minutes = Math.floor(rawSeconds / 60);
+            const seconds = Math.floor(rawSeconds % 60);
+            const formattedDuration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            setDuration(formattedDuration); // Save it to state!
+            
+            // Clean up the memory to prevent leaks
+            URL.revokeObjectURL(fileUrl);
+        };
+        
+        // 4. Trigger the metadata load
+        mediaElement.src = fileUrl;
+    }
+};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -40,7 +66,7 @@ const AddNewVideo = () => {
             const formData = new FormData();
             formData.append('title', title);
             formData.append('description', description);
-            formData.append('mediaFile', mediaFile);
+            formData.append('duration', duration);
             if (thumbnail) formData.append('thumbnail', thumbnail);
 
             const token = localStorage.getItem('lume_token');

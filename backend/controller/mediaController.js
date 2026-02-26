@@ -6,7 +6,7 @@ exports.uploadMedia = async (req, res) => {
             return res.status(400).json({ error: "Main media file is missing" });
         }
 
-        const { title, description } = req.body;
+        const { title, description, duration } = req.body;
 
         const mediaFile = req.files.mediaFile[0];
         const typeOfMedia = mediaFile.mimetype.startsWith('video/') ? 'video' : 'audio';
@@ -28,6 +28,7 @@ exports.uploadMedia = async (req, res) => {
             thumbnailPublicId: thumbId,
             mediaType: typeOfMedia,
             uploader: req.user.id
+            duration: duration || "00:00"
         });
 
         await newMedia.save();

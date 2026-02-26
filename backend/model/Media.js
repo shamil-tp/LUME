@@ -39,6 +39,10 @@ const mediaSchema = new mongoose.Schema({
         ref: 'User', 
         required: true
     },
+    duration: {
+        type: String,
+        default: '00:00'
+    },
     views: {
         type: Number,
         default: 0
