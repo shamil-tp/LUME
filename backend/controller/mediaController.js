@@ -70,3 +70,16 @@ exports.getMyMedia = async(req,res)=>{
         return res.status(401).json({message:"check controller for my media"})
     }
 }
+
+exports.getMediaInfo = async(req,res)=>{
+    try{
+        const mediaInfo = await Media.findById(req.params.mediaId)
+        if(!mediaInfo){
+            return res.status(401).json({message:"no media found with given id"})
+        }
+        return res.status(201).json({info:mediaInfo,message:true})
+    }catch(e){
+        console.log(e.message)
+        return res.status(401).json({message:"check media controller/ getMediaInfo"})
+    }
+}

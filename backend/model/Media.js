@@ -52,3 +52,5 @@ const mediaSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Media', mediaSchema);
+
+// additonal feilds to add pg rating, cast info, description, directed by , meta data,
