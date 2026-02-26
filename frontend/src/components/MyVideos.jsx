@@ -1,11 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import api from '../services/api'
 import './MyVideos.css';
 
 const MyVideos = () => {
+    let [myMedia,setMymedia] = useState([])
+    let [isLoding,setLoading] =useState(true)
+    const user = JSON.parse(localStorage.getItem('lume_user')) || null
+
+    
     useEffect(()=>{
         const fetchMyMedia = async()=>{
-            let token = localStorage.getItem('token')
+            let token = localStorage.getItem('lume_token')
             try{
                 if(!token){
                     throw new Error('token not found')
@@ -15,15 +20,18 @@ const MyVideos = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 })
+                setMymedia(response.data.media)
             }catch(e){
                 console.log('my media fetching failed')
                 console.log(e.message)
+            }finally{
+                setLoading(false)
             }
         }
         fetchMyMedia()
     },[])
-
-    return (
+    if(isLoding){
+        return (
         <div className="my-videos-container">
             <div className="my-videos-header">
                 <h2>Channel content</h2>
@@ -31,11 +39,43 @@ const MyVideos = () => {
 
             <div className="my-videos-list">
                 <div className="empty-state">
-                    <p>No videos available yet.</p>
+                    {/* <p>No videos available yet.</p> */}
+                    <p>Loading ...</p>
                 </div>
             </div>
         </div>
     );
+    }
+
+
+    // return (
+    //     <section className="yt-video-grid">
+    //         {myMedia.map((video) => (
+    //             <div key={video._id} className="yt-video-card">
+    //                 <div className="yt-thumbnail-container">
+    //                     <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
+    //                     <span className="yt-duration">{video.duration}</span>
+    //                 </div>
+
+    //                 <div className="yt-video-details">
+    //                     <img src={video.avatar} alt={video.channel} className="yt-channel-avatar" />
+
+    //                     <div className="yt-video-info">
+    //                         <h3 className="yt-video-title" title={video.title}>{video.title}</h3>
+    //                         <div className="yt-channel-name">{video.channel}</div>
+    //                         <div className="yt-video-meta">
+    //                             {video.views} • {video.time}
+    //                         </div>
+    //                     </div>
+
+    //                     <button className="yt-more-btn" onClick={(e) => e.stopPropagation()}>
+    //                         <MoreVertical size={20} />
+    //                     </button>
+    //                 </div>
+    //             </div>
+    //         ))}
+    //     </section>
+    // );
 };
 
 export default MyVideos;

@@ -8,7 +8,8 @@ const Topbar = ({ onToggleSidebar }) => {
         window.location.reload();
     };
 
-    const user = JSON.parse(localStorage.getItem('lume_user'))
+    const user = JSON.parse(localStorage.getItem('lume_user')) || null
+    // console.log(user)
 
     return (
         <header className="yt-topbar">
@@ -55,8 +56,6 @@ const Topbar = ({ onToggleSidebar }) => {
                     {/* <span>{user.name}</span> */}
                 </div>
                 <div className="yt-name" title="Name">
-                    {/* <User size={20} /> */}
-                    {/* <img src={user.picture} alt="" /> */}
                     <span>{user.name}</span>
                 </div>
             </div>

@@ -34,7 +34,7 @@ const DiscoverSection = ({ onMovieClick }) => {
     useEffect(() => {
         const fetchMedia = async()=>{
         try{
-            let token = localStorage.getItem("token")
+            let token = localStorage.getItem("lume_token")
             let response = await api.get('/media/fetchAllMedia',{
                 headers:{
                     'Authorization': `Bearer ${token}`,
@@ -50,7 +50,7 @@ const DiscoverSection = ({ onMovieClick }) => {
             console.log("error fetching video")
         }
     }
-        fetchMedia()
+        // fetchMedia()
         // return () => {
             
         // };

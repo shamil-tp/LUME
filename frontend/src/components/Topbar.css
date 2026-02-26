@@ -140,7 +140,9 @@
 }
 .yt-profile img{
     border-radius: 50%;
-    width: 100%;
+    /* width: 100%; */
+    width: 36px;
+    
 }
 
 /* Responsive */
