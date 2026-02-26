@@ -27,7 +27,7 @@ function App() {
         return <MyVideos />;
       case 'discover':
       default:
-        return <DiscoverSection onMovieClick={() => setIsVideoModalOpen(true)} />;
+        return <DiscoverSection onMovieClick={(videoId) => setIsVideoModalOpen(true)} />;
     }
   };
 

@@ -1,0 +1,92 @@
+/* The main wrapper for the entire watch page */
+.watch-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px;
+    color: var(--text-primary, #ffffff);
+}
+
+/* --- THE VIDEO PLAYER AREA --- */
+.video-player-wrapper {
+    width: 100%;
+    /* This creates a perfect 16:9 aspect ratio box! */
+    aspect-ratio: 16 / 9; 
+    background-color: #000; /* Always pitch black behind the video */
+    border-radius: var(--border-radius-md, 12px);
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.lume-player {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Ensures the video doesn't get cropped */
+    outline: none;
+}
+
+/* If it's just an audio file, make the player smaller */
+.audio-player {
+    height: 60px;
+    aspect-ratio: auto;
+    background-color: var(--bg-hover, #272727);
+}
+
+/* --- THE INFO SECTION BELOW THE VIDEO --- */
+.video-info-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.video-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+
+.video-metadata {
+    font-size: 14px;
+    color: var(--text-secondary, #aaaaaa);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* The YouTube-style Description Box */
+.video-description-box {
+    background-color: var(--bg-hover, #272727);
+    padding: 16px;
+    border-radius: var(--border-radius-md, 12px);
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.5;
+    transition: background-color var(--transition-fast, 0.2s);
+}
+
+.video-description-box:hover {
+    background-color: #3f3f3f; /* Slight highlight on hover, just like YT */
+}
+
+.video-description-box p {
+    margin: 0;
+    white-space: pre-wrap; /* Keeps the line breaks if the user pressed Enter */
+}
+
+/* Simple loading and error screens */
+.loading-screen, .error-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+    font-size: 20px;
+    color: var(--text-secondary, #aaaaaa);
+}
+
+.error-screen {
+    color: #e50914; /* Your LUME red */
+}
