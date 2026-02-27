@@ -9,7 +9,7 @@ const multiUpload = upload.fields([
     { name: 'thumbnail', maxCount: 1 }
 ]);
 
-router.post('/upload', protect, multiUpload, uploadMedia);
+// router.post('/upload', protect, multiUpload, uploadMedia); // upgraded to tusServer
 router.get('/fetchAllMedia',protect,getAllMedia)
 router.get('/fetchMyMedia',protect,getMyMedia)
 router.get('/fetchMediaInfo/:mediaId',protect,getMediaInfo)
