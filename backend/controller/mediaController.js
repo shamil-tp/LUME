@@ -102,3 +102,21 @@ exports.getMedia = async(req,res)=>{
         return res.status(401).json({message:"check media controller/ getMedia"})
     }
 }
+// Add this new controller function
+exports.incrementViewCount = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        // The magic $inc operator you guessed!
+        await Media.findByIdAndUpdate(
+            id, 
+            { $inc: { views: 1 } }, 
+            { new: true } // Optional: returns the updated document if you need the new count
+        );
+
+        res.status(200).json({ message: "View counted!" });
+    } catch (error) {
+        console.error("Error updating view count:", error);
+        res.status(500).json({ error: "Failed to update views" });
+    }
+};

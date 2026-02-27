@@ -8,6 +8,14 @@ const WatchVideo = ({videoId}) => {
     // const { id } = useParams(); // Gets the ID from /watch/:id
     const [video, setVideo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const handleVideoStart = async () => {
+    try {
+        // Send the PATCH request to add +1 to the database
+        await api.patch(`/media/incrementView/${videoId}`);
+    } catch (error) {
+        console.error("Failed to count view", error);
+    }
+};
 
     useEffect(() => {
         const fetchSingleVideo = async () => {
@@ -44,6 +52,7 @@ const WatchVideo = ({videoId}) => {
                         autoPlay 
                         src={video.mediaUrl}
                         poster={video.thumbnailUrl} // Shows the thumbnail before it plays
+                        onPlay={handleVideoStart}
                     >
                         Your browser does not support the video tag.
                     </video>
