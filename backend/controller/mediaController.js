@@ -1,4 +1,5 @@
 const Media = require('../model/Media');
+const { videoQueue } = require('../config/queue');
 
 exports.uploadMedia = async (req, res) => {
     try {
@@ -60,7 +61,7 @@ exports.getAllMedia = async(req,res)=>{
 
 exports.getMyMedia = async(req,res)=>{
     try{
-        const myMedia = await Media.find({uploader:req.user}).select("-mediaPublicId -thumbnailPublicId -updatedAt -__v -uploader")
+        const myMedia = await Media.find({uploader:req.user._id}).select("-mediaPublicId -thumbnailPublicId -updatedAt -__v -uploader")
         if(!myMedia){
             return res.status(201).json({message:'you have no media',status:false})
         }
@@ -118,5 +119,69 @@ exports.incrementViewCount = async (req, res) => {
     } catch (error) {
         console.error("Error updating view count:", error);
         res.status(500).json({ error: "Failed to update views" });
+    }
+};
+// Add this to your mediaController.js
+exports.finalizeUpload = async (req, res) => {
+    try {
+        // 1. Grab the metadata sent from React
+        console.log("Incoming Metadata:", req.body);
+        const { title, description, duration, rawVideoUrl } = req.body;
+        
+        // 2. Grab the user ID safely
+        const userId = req.user && (req.user._id || req.user.id);
+        console.log('finalizeUpload userId:', userId);
+
+        // 3. Handle the thumbnail
+        let thumbnailUrl = 'https://via.placeholder.com/1280x720.png?text=Processing...';
+        let thumbnailPublicId = '';
+        if (req.file) {
+            thumbnailUrl = req.file.path; 
+            thumbnailPublicId = req.file.filename || '';
+        }
+
+        // 4. Create the official LUME database entry
+        const newMedia = await Media.create({
+            title,
+            description,
+            duration,
+            mediaUrl: rawVideoUrl, 
+            mediaPublicId: 'tus-local-file', // Fallback for MongoDB validation
+            thumbnailUrl: thumbnailUrl,
+            thumbnailPublicId: thumbnailPublicId,
+            uploader: userId,
+            mediaType: 'video',
+            status: 'processing' // Tells the frontend we are working on it
+        });
+
+        // ==========================================
+        // 5. THE WAKE-UP CALL: Tell Redis to wake up the worker!
+        // ==========================================
+        await videoQueue.add('transcode-hls', {
+            mediaId: newMedia._id,
+            rawVideoPath: rawVideoUrl
+        });
+        
+        console.log(`🎟️ Ticket added to queue for video: ${newMedia._id}`);
+        // ==========================================
+
+        res.status(201).json({ 
+            message: "Upload finalized and queued for processing!", 
+            media: newMedia 
+        });
+
+    } catch (error) {
+        console.error("Finalize upload error name:", error.name);
+        console.error("Finalize upload error message:", error.message);
+        if (error && error.errors) {
+            console.error(
+                "Finalize upload validation errors:",
+                Object.keys(error.errors).map((key) => ({
+                    field: key,
+                    message: error.errors[key].message,
+                }))
+            );
+        }
+        res.status(500).json({ error: "Failed to save media metadata to database." });
     }
 };

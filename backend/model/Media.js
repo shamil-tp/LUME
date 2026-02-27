@@ -11,15 +11,20 @@ const mediaSchema = new mongoose.Schema({
         trim: true
     },
     
+    // --- UPDATED MEDIA FIELDS ---
+    // This will initially hold the raw Tus URL, and later be 
+    // overwritten by FFmpeg with the final .m3u8 streaming playlist URL
     mediaUrl: {
         type: String,
         required: true 
     },
+    // We removed 'required: true' because Cloudinary no longer handles the video!
     mediaPublicId: {
         type: String,
-        required: true 
+        default: '' 
     },
     
+    // --- THUMBNAIL FIELDS (Still using Cloudinary!) ---
     thumbnailUrl: {
         type: String,
         default: '' 
@@ -46,7 +51,16 @@ const mediaSchema = new mongoose.Schema({
     views: {
         type: Number,
         default: 0
+    },
+
+    // --- NEW STREAMING PIPELINE FIELDS ---
+    // Tracks the FFmpeg background worker status
+    status: {
+        type: String,
+        enum: ['processing', 'ready', 'failed'],
+        default: 'processing' // Defaults to processing as soon as Tus finishes
     }
+
 }, { 
     timestamps: true 
 });
