@@ -43,6 +43,17 @@ app.use(cors({
     credentials: true
 }));
 
+// INTERCEPT THE TUS UPLOADS
+app.all('/api/uploads', (req, res) => {
+    tusServer.handle(req, res);
+});
+
+app.all('/api/uploads/:id', (req, res) => {
+    tusServer.handle(req, res);
+});
+//======
+// IMPORTANT PLACE TUS ABOVE BODY PARASER
+//=======
 app.use(express.urlencoded({extended:true}))
 app.use(express.json())
 
@@ -51,17 +62,6 @@ app.use('/api',auth)
 
 const media = require('./routes/mediaRoutes')
 app.use('/api/media',media)
-
-// INTERCEPT THE TUS UPLOADS
-// 1. Handle the initial upload creation request
-app.all('/api/uploads', (req, res) => {
-    tusServer.handle(req, res);
-});
-
-// 2. Handle the incoming chunks for a specific file ID
-app.all('/api/uploads/:id', (req, res) => {
-    tusServer.handle(req, res);
-});
 
 // app.post('/api/login', Login)
 
