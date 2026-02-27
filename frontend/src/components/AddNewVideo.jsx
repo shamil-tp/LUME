@@ -93,7 +93,7 @@ const AddNewVideo = () => {
                             'Content-Type': 'multipart/form-data'
                         }
                     });
-
+                    console.log(response.data)
                     setMessage(`Success! Media queued for processing.`);
                     
                     // Reset everything after successful pipeline entry
