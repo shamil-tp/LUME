@@ -19,9 +19,16 @@ app.use('/api',auth)
 const media = require('./routes/mediaRoutes')
 app.use('/api/media',media)
 
-app.all('/api/uploads/*',(req,res)=>{
-    tusServer.handle(req,res)
-})
+// INTERCEPT THE TUS UPLOADS
+// 1. Handle the initial upload creation request
+app.all('/api/uploads', (req, res) => {
+    tusServer.handle(req, res);
+});
+
+// 2. Handle the incoming chunks for a specific file ID
+app.all('/api/uploads/:id', (req, res) => {
+    tusServer.handle(req, res);
+});
 
 // app.post('/api/login', Login)
 
