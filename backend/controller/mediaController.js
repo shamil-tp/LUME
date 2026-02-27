@@ -60,7 +60,7 @@ exports.getAllMedia = async(req,res)=>{
 
 exports.getMyMedia = async(req,res)=>{
     try{
-        const myMedia = await Media.find({uploader:req.user}).select("-mediaPublicId -thumbnailPublicId -updatedAt -__v -uploader")
+        const myMedia = await Media.find({uploader:req.user._id}).select("-mediaPublicId -thumbnailPublicId -updatedAt -__v -uploader")
         if(!myMedia){
             return res.status(201).json({message:'you have no media',status:false})
         }
@@ -124,11 +124,12 @@ exports.incrementViewCount = async (req, res) => {
 exports.finalizeUpload = async (req, res) => {
     try {
         // 1. Grab the metadata sent from React
-        console.log(req.body)
+        console.log(req.body,'==========')
         const { title, description, duration, rawVideoUrl } = req.body;
         
         // 2. Grab the user ID from your protect middleware
-        const userId = req.user._id;
+        const userId = req.user && (req.user._id || req.user.id);
+        console.log('finalizeUpload userId:', userId);
 
         // 3. Handle the thumbnail (if they uploaded one)
         // Assuming you still have Multer configured for simple image uploads
@@ -161,7 +162,17 @@ exports.finalizeUpload = async (req, res) => {
         });
 
     } catch (error) {
-        console.error("Finalize upload error:", error);
+        console.error("Finalize upload error name:", error.name);
+        console.error("Finalize upload error message:", error.message);
+        if (error && error.errors) {
+            console.error(
+                "Finalize upload validation errors:",
+                Object.keys(error.errors).map((key) => ({
+                    field: key,
+                    message: error.errors[key].message,
+                }))
+            );
+        }
         res.status(500).json({ error: "Failed to save media metadata to database." });
     }
 };

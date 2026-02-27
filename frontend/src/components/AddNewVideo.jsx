@@ -89,8 +89,8 @@ const AddNewVideo = () => {
                     // Note: Changed endpoint to a 'finalize' route 
                     const response = await api.post('/media/finalize-upload', formData, {
                         headers: {
+                            // Let Axios set the correct multipart boundary
                             'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'multipart/form-data'
                         }
                     });
                     console.log(response.data)
