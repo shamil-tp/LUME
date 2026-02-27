@@ -20,5 +20,5 @@ router.get('/fetchMedia/:mediaId',protect,getMedia)
 router.patch('/incrementView/:id', incrementViewCount);
 
 // v2 route
-router.patch('/finalize-upload',protect,upload.single('thumbnail'), finalizeUpload);
+router.post('/finalize-upload',protect,upload.single('thumbnail'), finalizeUpload);
 module.exports = router;
