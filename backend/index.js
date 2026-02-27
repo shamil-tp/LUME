@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const cors = require('cors')
+const path = require('path')
 const connectDB = require('./config/db')
 const tusServer = require('./services/tusServer')
 // const { Login } = require('./controller/authController')
@@ -71,7 +72,8 @@ app.use((err, req, res, next) => {
     console.error("Error Object Dump:", JSON.stringify(err, null, 2));
     res.status(500).json({ error: err.message, details: err });
 });
-
+// Add this near your other app.use() statements
+app.use('/api/hls', express.static(path.join(__dirname, 'uploads/hls')));
 // app.post('/api/login', Login)
 
 

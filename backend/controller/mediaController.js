@@ -1,4 +1,5 @@
 const Media = require('../model/Media');
+const { videoQueue } = require('../config/queue');
 
 exports.uploadMedia = async (req, res) => {
     try {
@@ -124,19 +125,19 @@ exports.incrementViewCount = async (req, res) => {
 exports.finalizeUpload = async (req, res) => {
     try {
         // 1. Grab the metadata sent from React
-        console.log(req.body,'==========')
+        console.log("Incoming Metadata:", req.body);
         const { title, description, duration, rawVideoUrl } = req.body;
         
-        // 2. Grab the user ID from your protect middleware
+        // 2. Grab the user ID safely
         const userId = req.user && (req.user._id || req.user.id);
         console.log('finalizeUpload userId:', userId);
 
-        // 3. Handle the thumbnail (if they uploaded one)
-        // Assuming you still have Multer configured for simple image uploads
+        // 3. Handle the thumbnail
         let thumbnailUrl = 'https://via.placeholder.com/1280x720.png?text=Processing...';
+        let thumbnailPublicId = '';
         if (req.file) {
-            // If you are saving thumbnails locally or to Cloudinary, map it here
             thumbnailUrl = req.file.path; 
+            thumbnailPublicId = req.file.filename || '';
         }
 
         // 4. Create the official LUME database entry
@@ -144,20 +145,28 @@ exports.finalizeUpload = async (req, res) => {
             title,
             description,
             duration,
-            // Right now, mediaUrl points to the raw Tus file. 
-            // Later, FFmpeg will overwrite this with the .m3u8 streaming playlist!
             mediaUrl: rawVideoUrl, 
+            mediaPublicId: 'tus-local-file', // Fallback for MongoDB validation
             thumbnailUrl: thumbnailUrl,
+            thumbnailPublicId: thumbnailPublicId,
             uploader: userId,
-            mediaType: 'video' 
+            mediaType: 'video',
+            status: 'processing' // Tells the frontend we are working on it
         });
 
-        // --- FUTURE FFMPEG TRIGGER GOES HERE ---
-        // queue.add('transcode', { videoId: newMedia._id, rawUrl: rawVideoUrl });
-        // ---------------------------------------
+        // ==========================================
+        // 5. THE WAKE-UP CALL: Tell Redis to wake up the worker!
+        // ==========================================
+        await videoQueue.add('transcode-hls', {
+            mediaId: newMedia._id,
+            rawVideoPath: rawVideoUrl
+        });
+        
+        console.log(`🎟️ Ticket added to queue for video: ${newMedia._id}`);
+        // ==========================================
 
         res.status(201).json({ 
-            message: "Upload finalized and saved to database!", 
+            message: "Upload finalized and queued for processing!", 
             media: newMedia 
         });
 
