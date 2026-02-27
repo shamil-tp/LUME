@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import * as tus from 'tus-js-client';
 import api from '../services/api';
 import './AddNewVideo.css';
 
@@ -10,6 +11,7 @@ const AddNewVideo = () => {
     const [duration, setDuration] = useState('00:00');
     
     const [isUploading, setIsUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0); // Track exact percentage
     const [message, setMessage] = useState('');
 
     const fileInputRef = useRef(null);
@@ -19,37 +21,28 @@ const AddNewVideo = () => {
     };
 
     const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        setMediaFile(file);
-        setTitle(file.name.split('.').slice(0, -1).join('.')); 
+        const file = e.target.files[0];
+        if (file) {
+            setMediaFile(file);
+            setTitle(file.name.split('.').slice(0, -1).join('.')); 
 
-        // --- THE DURATION EXTRACTION MAGIC ---
-        // 1. Create a temporary local URL for the file
-        const fileUrl = URL.createObjectURL(file);
-        
-        // 2. Create a hidden media element in memory
-        const mediaElement = document.createElement(file.type.startsWith('video/') ? 'video' : 'audio');
-        
-        // 3. When the browser finishes reading the file's basic info...
-        mediaElement.onloadedmetadata = () => {
-            const rawSeconds = mediaElement.duration;
+            // --- THE DURATION EXTRACTION MAGIC ---
+            const fileUrl = URL.createObjectURL(file);
+            const mediaElement = document.createElement(file.type.startsWith('video/') ? 'video' : 'audio');
             
-            // Format the seconds into MM:SS (e.g., 03:45)
-            const minutes = Math.floor(rawSeconds / 60);
-            const seconds = Math.floor(rawSeconds % 60);
-            const formattedDuration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            mediaElement.onloadedmetadata = () => {
+                const rawSeconds = mediaElement.duration;
+                const minutes = Math.floor(rawSeconds / 60);
+                const seconds = Math.floor(rawSeconds % 60);
+                const formattedDuration = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                setDuration(formattedDuration); 
+                URL.revokeObjectURL(fileUrl);
+            };
             
-            setDuration(formattedDuration); // Save it to state!
-            
-            // Clean up the memory to prevent leaks
-            URL.revokeObjectURL(fileUrl);
-        };
-        
-        // 4. Trigger the metadata load
-        mediaElement.src = fileUrl;
-    }
-};
+            mediaElement.src = fileUrl;
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,39 +53,72 @@ const AddNewVideo = () => {
         }
 
         setIsUploading(true);
-        setMessage('Uploading to LUME... Please do not close this page.');
+        setUploadProgress(0);
+        setMessage('Initializing secure upload...');
 
-        try {
-            const formData = new FormData();
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('duration', duration);
-            formData.append('mediaFile', mediaFile);
-            if (thumbnail) formData.append('thumbnail', thumbnail);
+        // STEP 1: THE TUS INGESTION
+        const upload = new tus.Upload(mediaFile, {
+            // Point this to your new Express Tus Server
+            endpoint: "http://localhost:5000/api/uploads/", 
+            retryDelays: [0, 3000, 5000, 10000, 20000],
+            metadata: {
+                filename: mediaFile.name,
+                filetype: mediaFile.type
+            },
+            onProgress: (bytesUploaded, bytesTotal) => {
+                const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(0);
+                setUploadProgress(percentage);
+                setMessage(`Ingesting Raw Media: ${percentage}%`);
+            },
+            onSuccess: async () => {
+                // STEP 2: SAVE METADATA TO MONGODB
+                setMessage('Ingestion complete! Packaging metadata...');
+                
+                try {
+                    const formData = new FormData();
+                    formData.append('title', title);
+                    formData.append('description', description);
+                    formData.append('duration', duration);
+                    // Pass the TUS URL so the backend knows which file to process!
+                    formData.append('rawVideoUrl', upload.url); 
+                    
+                    if (thumbnail) formData.append('thumbnail', thumbnail);
 
-            const token = localStorage.getItem('lume_token');
+                    const token = localStorage.getItem('lume_token');
 
-            const response = await api.post('/media/upload', formData, {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'multipart/form-data'
+                    // Note: Changed endpoint to a 'finalize' route 
+                    const response = await api.post('/media/finalize-upload', formData, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+
+                    setMessage(`Success! Media queued for processing.`);
+                    
+                    // Reset everything after successful pipeline entry
+                    setMediaFile(null);
+                    setThumbnail(null);
+                    setTitle('');
+                    setDescription('');
+                    setUploadProgress(0);
+
+                } catch (error) {
+                    console.error("Database saving error:", error);
+                    setMessage(error.response?.data?.error || 'Failed to save media details.');
+                } finally {
+                    setIsUploading(false);
                 }
-            });
+            },
+            onError: (error) => {
+                console.error("Tus upload error:", error);
+                setMessage('Upload failed due to network error.');
+                setIsUploading(false);
+            }
+        });
 
-            setMessage(`Success! ${response.data.message}`);
-            
-            // Reset everything after successful upload
-            setMediaFile(null);
-            setThumbnail(null);
-            setTitle('');
-            setDescription('');
-
-        } catch (error) {
-            console.error("Upload error:", error);
-            setMessage(error.response?.data?.error || 'Failed to upload file.');
-        } finally {
-            setIsUploading(false);
-        }
+        // Start the engine
+        upload.start();
     };
 
     return (
@@ -133,6 +159,13 @@ const AddNewVideo = () => {
                             <button type="button" className="clear-file-btn" onClick={() => setMediaFile(null)}>Change File</button>
                         </div>
 
+                        {/* --- NEW PROGRESS BAR UI --- */}
+                        {isUploading && (
+                            <div style={{ width: '100%', backgroundColor: 'var(--bg-primary)', height: '6px', borderRadius: '3px', overflow: 'hidden' }}>
+                                <div style={{ width: `${uploadProgress}%`, backgroundColor: '#e50914', height: '100%', transition: 'width 0.2s ease-out' }}></div>
+                            </div>
+                        )}
+
                         <div className="form-group">
                             <label>Title (Required)</label>
                             <input 
@@ -141,6 +174,7 @@ const AddNewVideo = () => {
                                 onChange={(e) => setTitle(e.target.value)} 
                                 required 
                                 className="yt-input"
+                                disabled={isUploading}
                             />
                         </div>
 
@@ -151,6 +185,7 @@ const AddNewVideo = () => {
                                 onChange={(e) => setDescription(e.target.value)} 
                                 rows="4" 
                                 className="yt-input"
+                                disabled={isUploading}
                             ></textarea>
                         </div>
 
@@ -161,6 +196,7 @@ const AddNewVideo = () => {
                                 accept="image/*" 
                                 onChange={(e) => setThumbnail(e.target.files[0])} 
                                 className="yt-file-input"
+                                disabled={isUploading}
                             />
                         </div>
 
@@ -169,7 +205,7 @@ const AddNewVideo = () => {
                             className="yt-btn-primary submit-btn" 
                             disabled={isUploading}
                         >
-                            {isUploading ? 'Uploading to Cloudinary...' : 'Publish Media'}
+                            {isUploading ? `Uploading... ${uploadProgress}%` : 'Publish Media'}
                         </button>
                     </form>
                 )}
