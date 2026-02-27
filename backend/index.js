@@ -40,7 +40,7 @@ app.use(cors({
         'Upload-Metadata', 
         'Upload-Offset'
     ],
-    credentials: true
+    // credentials: true
 }));
 
 // INTERCEPT THE TUS UPLOADS
@@ -62,6 +62,15 @@ app.use('/api',auth)
 
 const media = require('./routes/mediaRoutes')
 app.use('/api/media',media)
+
+// Global Error Handler to catch hidden errors like Multer/Cloudinary objects
+app.use((err, req, res, next) => {
+    console.error("======== GLOBAL ERROR CAUGHT ========");
+    console.error("Error Message:", err.message);
+    console.error("Error Stack:", err.stack);
+    console.error("Error Object Dump:", JSON.stringify(err, null, 2));
+    res.status(500).json({ error: err.message, details: err });
+});
 
 // app.post('/api/login', Login)
 

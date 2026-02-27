@@ -14,7 +14,7 @@ const storage = new CloudinaryStorage({
     params: {
         folder: 'lume_thumbnails', // Changed to reflect its new, specific job
         resource_type: 'image',    // Hard-locked to images only for security
-        allowed_formats: ['jpg', 'png', 'jpeg', 'webp'] // Removed video formats
+        allowedFormats: ['jpg', 'png', 'jpeg', 'webp'] // Removed video formats
     }
 });
 

@@ -18,7 +18,7 @@ const tusServer = new Server({
     datastore: new FileStore({ directory: uploadDir }),
     
     // 3. THE MAGIC HOOK: What happens when the 100% mark is reached?
-    onUploadFinish: async (req, res, upload) => {
+    onUploadFinish: async (req, upload) => {
         console.log(`✅ Upload Complete: ${upload.id}`);
         console.log(`📁 File Size: ${upload.size} bytes`);
         
