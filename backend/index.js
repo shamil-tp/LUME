@@ -9,12 +9,10 @@ const app = express()
 
 
 
-// Replace your basic app.use(cors()) with this:
 app.use(cors({
-    origin: 'http://localhost:5173', // Replace with your exact React port (e.g., 3000 or 5173)
+    origin: [process.env.FRONTEND_URL,'http://localhost:5173','http://localhost:5174'],
     methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     
-    // Headers the React client is allowed to SEND to Express
     allowedHeaders: [
         'Authorization', 
         'Content-Type', 
@@ -31,8 +29,6 @@ app.use(cors({
         'X-Requested-With'
     ],
     
-    // Headers the React client is allowed to READ from Express
-    // (Crucial for React to know the final upload.url!)
     exposedHeaders: [
         'Location', 
         'Tus-Extension', 

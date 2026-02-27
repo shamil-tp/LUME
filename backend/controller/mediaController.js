@@ -120,3 +120,47 @@ exports.incrementViewCount = async (req, res) => {
         res.status(500).json({ error: "Failed to update views" });
     }
 };
+// Add this to your mediaController.js
+exports.finalizeUpload = async (req, res) => {
+    try {
+        // 1. Grab the metadata sent from React
+        const { title, description, duration, rawVideoUrl } = req.body;
+        
+        // 2. Grab the user ID from your protect middleware
+        const userId = req.user._id;
+
+        // 3. Handle the thumbnail (if they uploaded one)
+        // Assuming you still have Multer configured for simple image uploads
+        let thumbnailUrl = 'https://via.placeholder.com/1280x720.png?text=Processing...';
+        if (req.file) {
+            // If you are saving thumbnails locally or to Cloudinary, map it here
+            thumbnailUrl = req.file.path; 
+        }
+
+        // 4. Create the official LUME database entry
+        const newMedia = await Media.create({
+            title,
+            description,
+            duration,
+            // Right now, mediaUrl points to the raw Tus file. 
+            // Later, FFmpeg will overwrite this with the .m3u8 streaming playlist!
+            mediaUrl: rawVideoUrl, 
+            thumbnailUrl: thumbnailUrl,
+            uploader: userId,
+            mediaType: 'video' 
+        });
+
+        // --- FUTURE FFMPEG TRIGGER GOES HERE ---
+        // queue.add('transcode', { videoId: newMedia._id, rawUrl: rawVideoUrl });
+        // ---------------------------------------
+
+        res.status(201).json({ 
+            message: "Upload finalized and saved to database!", 
+            media: newMedia 
+        });
+
+    } catch (error) {
+        console.error("Finalize upload error:", error);
+        res.status(500).json({ error: "Failed to save media metadata to database." });
+    }
+};
