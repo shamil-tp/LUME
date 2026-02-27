@@ -1,31 +1,26 @@
 import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom'; // Grabs the video ID from the URL
 import api from '../services/api';
+import LumePlayer from './LumePlayer'; // Import the player we built
 import './WatchVideo.css';
 
-const WatchVideo = ({videoId}) => {
-    const id = videoId
-    // const { id } = useParams(); // Gets the ID from /watch/:id
+const WatchVideo = ({ videoId }) => {
     const [video, setVideo] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+
     const handleVideoStart = async () => {
-    try {
-        // Send the PATCH request to add +1 to the database
-        await api.patch(`/media/incrementView/${videoId}`);
-    } catch (error) {
-        console.error("Failed to count view", error);
-    }
-};
+        try {
+            await api.patch(`/media/incrementView/${videoId}`);
+        } catch (error) {
+            console.error("Failed to count view", error);
+        }
+    };
 
     useEffect(() => {
         const fetchSingleVideo = async () => {
             try {
-                const token = localStorage.getItem('lume_token')
-                // Fetch the specific video data from your Express backend
-                const response = await api.get(`/media/fetchMedia/${id}`,{
-                    headers:{
-                        'Authorization': `Bearer ${token}`
-                    }
+                const token = localStorage.getItem('lume_token');
+                const response = await api.get(`/media/fetchMedia/${videoId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setVideo(response.data.media);
             } catch (error) {
@@ -34,9 +29,8 @@ const WatchVideo = ({videoId}) => {
                 setIsLoading(false);
             }
         };
-
         fetchSingleVideo();
-    }, [id]);
+    }, [videoId]);
 
     if (isLoading) return <div className="loading-screen">Loading LUME Player...</div>;
     if (!video) return <div className="error-screen">Video not found.</div>;
@@ -44,18 +38,13 @@ const WatchVideo = ({videoId}) => {
     return (
         <div className="watch-container">
             <div className="video-player-wrapper">
-                {/* THE ACTUAL STREAMING MAGIC HAPPENS HERE */}
                 {video.mediaType === 'video' ? (
-                    <video 
-                        className="lume-player" 
-                        controls 
-                        autoPlay 
-                        src={video.mediaUrl}
-                        poster={video.thumbnailUrl} // Shows the thumbnail before it plays
-                        onPlay={handleVideoStart}
-                    >
-                        Your browser does not support the video tag.
-                    </video>
+                    /* Swap native video tag for LumePlayer */
+                    <LumePlayer 
+                        videoUrl={video.mediaUrl} 
+                        poster={video.thumbnailUrl}
+                        onPlay={handleVideoStart} 
+                    />
                 ) : (
                     <audio 
                         className="lume-player audio-player" 

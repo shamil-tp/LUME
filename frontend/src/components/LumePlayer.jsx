@@ -3,7 +3,7 @@ import Hls from 'hls.js';
 import { Play, Pause, Volume2, VolumeX, Maximize, RotateCcw } from 'lucide-react';
 import './LumePlayer.css';
 
-const LumePlayer = ({ videoUrl, poster }) => {
+const LumePlayer = ({ videoUrl, poster, onPlay }) => {
     const videoRef = useRef(null);
     const containerRef = useRef(null);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -29,15 +29,17 @@ const LumePlayer = ({ videoUrl, poster }) => {
     }, [videoUrl]);
 
     // Handlers
-    const togglePlay = () => {
-        if (videoRef.current.paused) {
-            videoRef.current.play();
-            setIsPlaying(true);
-        } else {
-            videoRef.current.pause();
-            setIsPlaying(false);
-        }
-    };
+    // Inside LumePlayer.jsx
+const togglePlay = () => {
+    if (videoRef.current.paused) {
+        videoRef.current.play();
+        setIsPlaying(true);
+        if (onPlay) onPlay(); // <--- Add this line to trigger the view counter
+    } else {
+        videoRef.current.pause();
+        setIsPlaying(false);
+    }
+};
 
     const handleTimeUpdate = () => {
         const currentProgress = (videoRef.current.currentTime / videoRef.current.duration) * 100;
