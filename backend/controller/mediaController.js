@@ -124,6 +124,7 @@ exports.incrementViewCount = async (req, res) => {
 exports.finalizeUpload = async (req, res) => {
     try {
         // 1. Grab the metadata sent from React
+        console.log(req.body)
         const { title, description, duration, rawVideoUrl } = req.body;
         
         // 2. Grab the user ID from your protect middleware
