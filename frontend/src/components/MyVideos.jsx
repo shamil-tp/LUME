@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import api from '../services/api'
 import './MyVideos.css';
 
-const MyVideos = () => {
-    let [myMedia,setMymedia] = useState([])
-    let [isLoding,setLoading] =useState(true)
+const MyVideos = ({onMovieClick}) => {
+    const [myMedia,setMymedia] = useState([])
+    const [isLoding,setLoading] =useState(true)
     const user = JSON.parse(localStorage.getItem('lume_user')) || null
 
     
@@ -51,7 +51,7 @@ const MyVideos = () => {
             <section className="yt-video-grid">
                 {myMedia.map((video) => (
                     <div key={video._id} className="yt-video-card">
-                        <div className="yt-thumbnail-container">
+                        <div className="yt-thumbnail-container" onClick={()=>{onMovieClick(video._id)}}>
                             <img src={video.thumbnailUrl} alt={video.title} className="yt-thumbnail" />
                             <span className="yt-duration">{video.duration}</span>
                         </div>

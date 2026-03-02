@@ -27,7 +27,7 @@ function App() {
       case 'add':
         return <AddNewVideo />;
       case 'myVideos':
-        return <MyVideos />;
+        return <MyVideos onMovieClick={(videoId) => {setCurrentVideoId(videoId);setIsVideoModalOpen(true)}} />;
       case 'watch':
         return <WatchVideo videoId={currentVideoId} />;
       case 'discover':

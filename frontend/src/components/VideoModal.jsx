@@ -7,25 +7,25 @@ const VideoModal = ({ videoId,isOpen, onClose, onPlay }) => {
     let [media,setMedia] = useState({})
     let [isLoading,setLoading] = useState(true)
 
-    useEffect(()=>{
-        if (!isOpen || !videoId) return;
-        const fetchMediaInfo = async()=>{
-            try{
-            let token = localStorage.getItem('lume_token')
-            let response = await api.get(`/media/fetchMediaInfo/${videoId}`,{
-                headers:{
-                    "Authorization": `Bearer ${token}`
-                }
-            })
-            setMedia(response.data.info)
-            setLoading(false)
-        }catch(e){
-            console.log(e.message)
-            console.log('error fetching video data')
+    useEffect(() => {
+    if (!isOpen || !videoId) return;
+
+    const fetchMediaInfo = async () => {
+        setLoading(true); // Reset loading state whenever a new video is opened
+        try {
+            let token = localStorage.getItem('lume_token');
+            let response = await api.get(`/media/fetchMediaInfo/${videoId}`, {
+                headers: { "Authorization": `Bearer ${token}` }
+            });
+            setMedia(response.data.info);
+            setLoading(false);
+        } catch (e) {
+            console.error('Error fetching video data:', e.message);
+            setLoading(false); // Stop loading even on error
         }
-        }
-        fetchMediaInfo()
-    },[videoId,isOpen])
+    };
+    fetchMediaInfo();
+}, [videoId, isOpen]);
 
     if (!isOpen) return null;
 

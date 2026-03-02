@@ -10,6 +10,25 @@ const LumePlayer = ({ videoUrl, poster, onPlay }) => {
     const [progress, setProgress] = useState(0);
     const [isMuted, setIsMuted] = useState(false);
     const [showControls, setShowControls] = useState(true);
+    const [isBuffering, setIsBuffering] = useState(false);
+
+useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const onWaiting = () => setIsBuffering(true);
+    const onPlaying = () => setIsBuffering(false);
+
+    video.addEventListener('waiting', onWaiting);
+    video.addEventListener('playing', onPlaying);
+    // Also stop buffering if the video is paused manually
+    video.addEventListener('pause', () => setIsBuffering(false));
+
+    return () => {
+        video.removeEventListener('waiting', onWaiting);
+        video.removeEventListener('playing', onPlaying);
+    };
+}, []);
 
     useEffect(() => {
         const video = videoRef.current;
@@ -47,10 +66,20 @@ const togglePlay = () => {
     };
 
     const handleSeek = (e) => {
-        const time = (e.target.value / 100) * videoRef.current.duration;
-        videoRef.current.currentTime = time;
+    const duration = videoRef.current.duration;
+    
+    // 1. Check if duration is a valid, finite number
+    if (!duration || !isFinite(duration)) return;
+
+    // 2. Calculate the new time
+    const newTime = (e.target.value / 100) * duration;
+
+    // 3. Final safety check before setting
+    if (!isNaN(newTime) && isFinite(newTime)) {
+        videoRef.current.currentTime = newTime;
         setProgress(e.target.value);
-    };
+    }
+};
 
     const toggleFullscreen = () => {
         if (!document.fullscreenElement) {
@@ -67,6 +96,12 @@ const togglePlay = () => {
             onMouseMove={() => setShowControls(true)}
             onMouseLeave={() => isPlaying && setShowControls(false)}
         >
+            {/* Buffering Spinner */}
+        {isBuffering && (
+            <div className="lume-buffer-overlay">
+                <div className="lume-spinner"></div>
+            </div>
+        )}
             <video
                 ref={videoRef}
                 className="lume-video"
