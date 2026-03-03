@@ -43,7 +43,7 @@ app.use(cors({
     ],
     // credentials: true
 }));
-app.get('/', (req, res) => {
+app.get('/hello', (req, res) => {
     const ua = req.get('User-Agent');
     const ip = req.ip;
     const lang = req.get('Accept-Language');
