@@ -13,6 +13,8 @@ if (!fs.existsSync(uploadDir)) {
 const tusServer = new Server({
     // The base route where React will send the chunks
     path: '/api/uploads', 
+    relativeLocation: true,
+    respectForwardedHeaders: true,
     
     // Tell Tus to save the chunks to your local hard drive
     datastore: new FileStore({ directory: uploadDir }),
