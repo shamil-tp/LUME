@@ -43,6 +43,38 @@ app.use(cors({
     ],
     // credentials: true
 }));
+app.get('/', (req, res) => {
+    const ua = req.get('User-Agent');
+    const ip = req.ip;
+    const lang = req.get('Accept-Language');
+
+    res.send(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+            <title>Client Details</title>
+        </head>
+        <body class="bg-light">
+            <div class="container mt-5">
+                <div class="card shadow-sm mx-auto" style="max-width: 600px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">System Information</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>IP Address:</strong> ${ip}</li>
+                        <li class="list-group-item"><strong>Language:</strong> ${lang}</li>
+                        <li class="list-group-item text-muted" style="font-size: 0.9rem;">
+                            <strong>User Agent:</strong><br>${ua}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </body>
+        </html>
+    `);
+});
 
 // INTERCEPT THE TUS UPLOADS
 app.all('/api/uploads', (req, res) => {
