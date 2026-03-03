@@ -59,7 +59,7 @@ const AddNewVideo = () => {
         // STEP 1: THE TUS INGESTION
         const upload = new tus.Upload(mediaFile, {
             // Point this to your new Express Tus Server
-            endpoint: "http://localhost:3001/api/uploads/", 
+            endpoint: "https://api.shamiltp.me/api/uploads/", 
             retryDelays: [0, 3000, 5000, 10000, 20000],
             metadata: {
                 filename: mediaFile.name,
